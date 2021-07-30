@@ -1,0 +1,23 @@
+table flavor
+table topping
+table breyers
+table benjerry
+table baskinrobbins
+table turkeyhill
+table haagendazs
+
+create or replace procedure insrt(tablename varchar2) as
+flav flavor.name%type;
+cursor cur is select name from flavor;
+begin
+open cur;
+loop
+fetch cur into flav;
+exit when cur%notfound;
+execute immediate 'insert into ' || tablename || '(flavor, scoopprice) values(:status,0)' using flav;
+end loop;
+if cur%isopen then
+close cur;
+end if;
+end;
+/

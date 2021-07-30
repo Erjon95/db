@@ -1,0 +1,210 @@
+https://www.oracleappsdna.com/2012/02/demobld-sql-oracle-database-seeded-table-scripts-emp-dept-bonus-salgrade-dummy/
+
+https://www.oracle.com/webfolder/technetwork/tutorials/architecture-diagrams/19/database-technical-architecture.html
+
+https://docs.oracle.com/database/121/TTSQL/types.htm#TTSQL124
+
+https://docs.oracle.com/cd/B19188_01/doc/B15917/sqcmd.htm#i1008452
+
+https://www.oracletutorial.com/getting-started/oracle-sample-database
+
+1. LIST THE JOBS IN NEW YORK CITY  
+ select distinct job as "Jobs in New York City" from emp
+ where deptno = (select deptno from dept where loc = 'NEW YORK');
+
+2. LIST THE MANAGERS IN DALLAS
+  select * from emp
+  where deptno = (select deptno from dept where loc = 'DALLAS') and job = 'MANAGER';
+
+3. LIST THE SALARIES OF EMPLOYEES WORKING IN BOSTON
+  select sal from emp
+  where deptno = (select deptno from dept where loc = 'Boston');
+
+4. WHAT ARE THE HIGHEST SALARIES FOR EACH DEPARTMENT
+  select dname, max(sal) from emp join dept
+  using (deptno)
+  group by dname;
+
+5. WHICH LOCATION HAS THE HIGEST NUMBER OF EMPLOYEES
+  select loc from dept
+  where deptno = (select deptno from emp group by deptno having count(*) = (select max(count(*)) from emp group by deptno));
+
+6. LIST THE LOWEST PAID LOCATION 
+  select loc from dept
+  where deptno = (select deptno from emp group by deptno having sum(sal) = (select min(sum(sal)) from emp group by deptno));
+
+7. WHICH LOCATION HAS LEAST NUMBER  OF  EMPLOYEES
+  select loc from dept
+  where deptno = (select deptno from emp group by deptno having count(*) = (select min(count(*)) from emp group by deptno));
+
+8. LIST THE DEPARTMENT NAMES OF EMPLOYEES  WHO JOINED IN THE YEAR 1981
+   select distinct dname from dept
+   where deptno in (select deptno from emp where hiredate like '%81');
+
+9. List the department name which has no employees.
+  select dname from dept
+  where deptno not in (select deptno from emp group by deptno having count(*) > 0);
+
+1. Find out where does the higest salaried employee lives
+  select e.ename, e.sal, d.loc from emp e, dept d
+  2  where e.deptno = d.deptno and e.sal in (select max(sal) from emp);
+
+2. Find the department dname which has lowest avg salary
+  select dname, avg(sal) from emp join dept
+  on dept.deptno = emp.deptno
+  group by dname
+  having avg(sal) = (select min(avg(sal)) from emp group by deptno);
+
+3. Find employees who are not managers
+  select ename from emp
+  where empno not in (select distinct mgr from emp where mgr is not null);
+
+4. Find the lowest paid employee and their department name in each department 
+  select ename, sal, dname from emp join dept
+  using (deptno)
+  where sal in (select min(sal) from emp group by deptno);
+
+5. what is the min salary of 'ACCOUNTING' department 
+  select * from emp join dept
+  2  using (deptno)
+  3  where sal = (select min(sal) from emp where deptno = (select deptno from dept where dname = 'ACCOUNTING'));
+
+6. which employee has more than three reportees
+7.List  the higest experience employee in each department
+
+CREATE TABLE EMP
+       (EMPNO NUMBER(4) NOT NULL,
+        ENAME VARCHAR2(10),
+        JOB VARCHAR2(9),
+        MGR NUMBER(4),
+        HIREDATE DATE,
+        SAL NUMBER(7, 2),
+        COMM NUMBER(7, 2),
+        DEPTNO NUMBER(2));
+ 
+INSERT INTO EMP VALUES
+        (7369, 'SMITH',  'CLERK',     7902,
+        TO_DATE('17-DEC-1980', 'DD-MON-YYYY'),  800, NULL, 20);
+INSERT INTO EMP VALUES
+        (7499, 'ALLEN',  'SALESMAN',  7698,
+        TO_DATE('20-FEB-1981', 'DD-MON-YYYY'), 1600,  300, 30);
+INSERT INTO EMP VALUES
+        (7521, 'WARD',   'SALESMAN',  7698,
+        TO_DATE('22-FEB-1981', 'DD-MON-YYYY'), 1250,  500, 30);
+INSERT INTO EMP VALUES
+        (7566, 'JONES',  'MANAGER',   7839,
+        TO_DATE('2-APR-1981', 'DD-MON-YYYY'),  2975, NULL, 20);
+INSERT INTO EMP VALUES
+        (7654, 'MARTIN', 'SALESMAN',  7698,
+        TO_DATE('28-SEP-1981', 'DD-MON-YYYY'), 1250, 1400, 30);
+INSERT INTO EMP VALUES
+        (7698, 'BLAKE',  'MANAGER',   7839,
+        TO_DATE('1-MAY-1981', 'DD-MON-YYYY'),  2850, NULL, 30);
+INSERT INTO EMP VALUES
+        (7782, 'CLARK',  'MANAGER',   7839,
+        TO_DATE('9-JUN-1981', 'DD-MON-YYYY'),  2450, NULL, 10);
+INSERT INTO EMP VALUES
+        (7788, 'SCOTT',  'ANALYST',   7566,
+        TO_DATE('09-DEC-1982', 'DD-MON-YYYY'), 3000, NULL, 20);
+INSERT INTO EMP VALUES
+        (7839, 'KING',   'PRESIDENT', NULL,
+        TO_DATE('17-NOV-1981', 'DD-MON-YYYY'), 5000, NULL, 10);
+INSERT INTO EMP VALUES
+        (7844, 'TURNER', 'SALESMAN',  7698,
+        TO_DATE('8-SEP-1981', 'DD-MON-YYYY'),  1500,    0, 30);
+INSERT INTO EMP VALUES
+        (7876, 'ADAMS',  'CLERK',     7788,
+        TO_DATE('12-JAN-1983', 'DD-MON-YYYY'), 1100, NULL, 20);
+INSERT INTO EMP VALUES
+        (7900, 'JAMES',  'CLERK',     7698,
+        TO_DATE('3-DEC-1981', 'DD-MON-YYYY'),   950, NULL, 30);
+INSERT INTO EMP VALUES
+        (7902, 'FORD',   'ANALYST',   7566,
+        TO_DATE('3-DEC-1981', 'DD-MON-YYYY'),  3000, NULL, 20);
+INSERT INTO EMP VALUES
+        (7934, 'MILLER', 'CLERK',     7782,
+        TO_DATE('23-JAN-1982', 'DD-MON-YYYY'), 1300, NULL, 10);
+ 
+CREATE TABLE DEPT
+       (DEPTNO NUMBER(2),
+        DNAME VARCHAR2(14),
+        LOC VARCHAR2(13) );
+ 
+INSERT INTO DEPT VALUES (10, 'ACCOUNTING', 'NEW YORK');
+INSERT INTO DEPT VALUES (20, 'RESEARCH',   'DALLAS');
+INSERT INTO DEPT VALUES (30, 'SALES',      'CHICAGO');
+INSERT INTO DEPT VALUES (40, 'OPERATIONS', 'BOSTON');
+
+ EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM
+---------- ---------- --------- ---------- --------- ---------- ----------
+    DEPTNO
+----------
+      7369 SMITH      CLERK           7902 17-DEC-80        800
+        20
+
+      7499 ALLEN      SALESMAN        7698 20-FEB-81       1600        300
+        30
+
+      7521 WARD       SALESMAN        7698 22-FEB-81       1250        500
+        30
+
+
+     EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM
+---------- ---------- --------- ---------- --------- ---------- ----------
+    DEPTNO
+----------
+      7566 JONES      MANAGER         7839 02-APR-81       2975
+        20
+
+      7654 MARTIN     SALESMAN        7698 28-SEP-81       1250       1400
+        30
+
+      7698 BLAKE      MANAGER         7839 01-MAY-81       2850
+        30
+
+
+     EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM
+---------- ---------- --------- ---------- --------- ---------- ----------
+    DEPTNO
+----------
+      7782 CLARK      MANAGER         7839 09-JUN-81       2450
+        10
+
+      7788 SCOTT      ANALYST         7566 09-DEC-82       3000
+        20
+
+      7839 KING       PRESIDENT            17-NOV-81       5000
+        10
+
+
+     EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM
+---------- ---------- --------- ---------- --------- ---------- ----------
+    DEPTNO
+----------
+      7844 TURNER     SALESMAN        7698 08-SEP-81       1500          0
+        30
+
+      7876 ADAMS      CLERK           7788 12-JAN-83       1100
+        20
+
+      7900 JAMES      CLERK           7698 03-DEC-81        950
+        30
+
+
+     EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM
+---------- ---------- --------- ---------- --------- ---------- ----------
+    DEPTNO
+----------
+      7902 FORD       ANALYST         7566 03-DEC-81       3000
+        20
+
+      7934 MILLER     CLERK           7782 23-JAN-82       1300
+	10
+
+
+DEPTNO DNAME          LOC
+---------- -------------- -------------
+        10 ACCOUNTING     NEW YORK
+        20 RESEARCH       DALLAS
+        30 SALES          CHICAGO
+        40 OPERATIONS     BOSTON

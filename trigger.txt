@@ -1,0 +1,9 @@
+create trigger trig
+before insert on emp
+for each row
+begin
+if to_char(sysdate, 'dy') in ('sun', 'mon') then
+raise_application_error(-20000, 'cannot insert into db');
+end if;
+end;
+/

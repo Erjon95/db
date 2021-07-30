@@ -1,0 +1,9 @@
+create or replace trigger newTrigger1
+after delete or update of sal on emp
+for each row
+begin
+if :new.sal > 15000 then
+raise_application_error(-20000, 'sal exceeds permissable limit');
+end if;
+end;
+/

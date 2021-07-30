@@ -1,0 +1,24 @@
+declare
+e_sal emp.sal%type;
+e_row emp%rowtype;
+e_increment emp.sal%type := &e_increment;
+e_job emp.job%type := &e_job;
+begin
+select sal into e_sal from emp where empno = 7839;
+select * into e_row from emp where empno = 7839;
+dbms_output.put_line(e_row.ename || ', ' || e_row.sal || ', ' || e_row.job);
+--DML in PL/SQL
+update emp set sal = sal + 100;
+update emp set sal = sal + e_increment where job = e_job;
+if sql%found then
+dbms_output.put_line('Update completed and updated. ' || sql%rowcount);
+else
+dbms_output.put_line('Could not complete update.');
+end if;
+if sql%isopen then
+dbms_output.put_line('Cursor is open.');
+else
+dbms_output.put_line('Cursor is not open.');
+end if;
+end;
+/

@@ -1,0 +1,16 @@
+create or replace function compute_total_sal_dept(a number) return number as
+v_sal number(5);
+cursor emp_sal is select sal from emp where deptno = a;
+e_sal emp.sal%type;
+begin
+v_sal := 0;
+open emp_sal;
+loop
+fetch emp_sal into e_sal;
+exit when emp_sal%notfound;
+v_sal := v_sal + e_sal;
+end loop;
+close emp_sal;
+return v_sal;
+end;
+/

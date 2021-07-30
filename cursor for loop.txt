@@ -1,0 +1,8 @@
+declare
+cursor empCur is select * from emp where deptno = 10;
+begin
+for cur in empCur loop
+dbms_output.put_line(cur.empno || cur.ename || cur.job);
+end loop;
+end;
+/

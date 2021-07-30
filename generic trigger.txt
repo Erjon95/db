@@ -1,0 +1,13 @@
+create trigger genericTrigger
+before insert or update or delete on emp
+begin
+case
+when inserting then
+raise_application_error(-20000, 'cannot insert into db');
+when updating then
+raise_application_error(-20000, 'cannot update db');
+when deleting then
+raise_application_error(-20000, 'cannot delete from db');
+end case;
+end;
+/

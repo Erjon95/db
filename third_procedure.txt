@@ -1,0 +1,14 @@
+create or replace procedure square_proc(a in out number) as
+begin
+a := a * a;
+end;
+/
+
+declare
+n number;
+begin
+n := 5;
+square_proc(n);
+dbms_output.put_line(n);
+end;
+/

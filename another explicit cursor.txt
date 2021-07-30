@@ -1,0 +1,15 @@
+declare
+cursor emp_dept_cur is select empno, ename, emp.deptno, loc from emp, dept where emp.deptno = dept.deptno;
+e_empno emp.empno%type;
+e_ename emp.ename%type;
+d_loc dept.loc%type;
+e_deptno emp.deptno%type;
+begin
+open emp_dept_cur;
+loop
+fetch emp_dept_cur into e_empno, e_ename, e_deptno, d_loc;
+exit when emp_dept_cur%notfound;
+dbms_output.put_line(e_empno || '::' || e_ename || '::' || d_loc || '::' || e_deptno);
+end loop;
+close emp_dept_cur;
+end;

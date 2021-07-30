@@ -1,0 +1,5 @@
+create or replace procedure double_proc(a in number, b out number) as
+begin
+b := a;
+end;
+/

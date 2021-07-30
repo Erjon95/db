@@ -1,0 +1,16 @@
+declare
+v_n1 number(3):=10;
+v_n2 number(2):=20;
+v_sum number(2);
+begin
+v_sum:=v_n1 + v_n2;
+dbms_output.put_line('Hola! Welcome to PL/SQL Programming');
+dbms_output.put_line('What is this?');
+dbms_output.put_line(v_n1||'+'||v_n2|| '=' ||v_sum);
+if v_sum >= 100 then
+dbms_output.put_line(v_sum||' is a three digit number');
+else
+dbms_output.put_line(v_sum||' is not a three digit number');
+end if;
+end;
+/

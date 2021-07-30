@@ -1,0 +1,27 @@
+declare
+cursor emp_cur is select empno, ename, sal, deptno from emp where deptno = 10;
+e_empno emp.empno%type;
+e_ename emp.ename%type;
+e_sal emp.sal%type;
+e_deptno emp.deptno%type;
+v_increment number(4);
+begin
+open emp_cur;
+loop
+fetch emp_cur into e_empno, e_ename, e_sal, e_deptno;
+exit when emp_cur%notfound;
+if e_sal > 2000 and e_sal < 3000 then
+v_increment := e_sal * 5/100;
+update emp set sal = sal + v_increment where empno = e_empno;
+elsif e_sal > 1000 and e_sal <= 2000 then
+v_increment := e_sal * 10/100;
+update emp set sal = sal + v_increment where empno = e_empno;
+elsif e_sal >= 0 and e_sal <= 1000 then
+v_increment := e_sal * 10/100;
+update emp set sal = sal + v_increment where empno = e_empno;
+end if;
+dbms_output.put_line(e_empno || '::' || e_ename || '::' || e_sal || '::' || e_deptno);
+end loop;
+close emp_cur;
+ end;
+/

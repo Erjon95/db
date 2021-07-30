@@ -1,0 +1,20 @@
+declare
+a number := 0;
+b number := 10;
+c number;
+eRow emp%rowtype;
+begin
+select * into eRow from emp where job = 'PROGRAMMER';
+a := 'a';
+c := b/a;
+exception
+ when zero_divide then
+dbms_output.put_line('cannot divide by 0');
+when value_error then
+dbms_output.put_line('cannot assing a string literal to a number type');
+when no_data_found then
+dbms_output.put_line('no data found');
+when others then
+dbms_output.put_line('program stopped due to ' || sqlerrm);
+end;
+/

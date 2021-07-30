@@ -1,0 +1,7 @@
+create or replace trigger newTrigger
+after delete or update on emp
+for each row
+begin
+dbms_output.put_line(:old.sal || ' and ' || :new.sal);
+end;
+/
